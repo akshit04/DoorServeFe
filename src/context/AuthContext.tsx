@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../api/axios';
+import api from '../api/api';
 import { User } from '../types/user';
 
 interface AuthContextType {
@@ -31,8 +31,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchCurrentUser = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get('/auth/me');
-      setCurrentUser(response.data);
+      const response = await api.user.getCurrentUser();
+      setCurrentUser(response);
       setError(null);
     } catch (err) {
       localStorage.removeItem('token');
@@ -45,13 +45,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      const response = await api.post('/auth/login', { email, password });
-      const { token, user } = response.data;
+      const response = await api.user.login(email, password);
+      const { token, user } = response;
       localStorage.setItem('token', token);
       setCurrentUser(user);
       setError(null);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to login');
+      setError(err.response?.message || 'Failed to login');
       throw err;
     } finally {
       setIsLoading(false);
