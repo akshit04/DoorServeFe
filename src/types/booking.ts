@@ -4,7 +4,7 @@ import { Service } from './service';
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
 export interface Booking {
-    id: number;
+    id: string;
     customer: User;
     service: Service;
     providerId: number;

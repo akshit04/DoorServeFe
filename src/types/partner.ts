@@ -1,5 +1,5 @@
 export interface PartnerProfile {
-    id: number;
+    id: string;
     userId: number;
     businessName: string;
     description: string;
@@ -34,7 +34,7 @@ export interface PartnerStats {
 }
   
 export interface PartnerAvailability {
-    id: number;
+    id: string;
     partnerId: number;
     dayOfWeek: number; // 0-6 (Sunday-Saturday)
     startTime: string; // HH:MM format
