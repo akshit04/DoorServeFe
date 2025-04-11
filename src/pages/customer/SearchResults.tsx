@@ -29,7 +29,7 @@ const SearchResults: React.FC = () => {
   // Fetch all categories for filtering
   const { data: categories } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => api.categories.getAllCategories()
+    queryFn: () => api.category.getAllCategories()
   });
   
   // Filter the search results

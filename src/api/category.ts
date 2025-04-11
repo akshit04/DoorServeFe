@@ -6,6 +6,9 @@ export const categoryApi = {
    * Get all service categories
    */
   getAllCategories: async () => {
+    // var dummyCategories = [{'id': 'id', 'name': 'name', 'description': 'description', 'iconUrl': 'iconUrl'}];
+    // console.log("Dummy categories: ", dummyCategories);
+    // return dummyCategories;
     const response = await api.get<Category[]>('/categories');
     return response.data;
   },
