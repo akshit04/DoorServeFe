@@ -44,4 +44,15 @@ export const bookingApi = {
     const response = await api.put<Booking>(`/bookings/${id}/cancel`);
     return response.data;
   },
+
+  /**
+   * Get bookings for current partner (Partner only)
+   */
+  getPartnerBookings: async (status?: BookingStatus) => {
+    const url = status
+    ? `/bookings/partner?status=${status}`
+    : '/bookings/partner';
+    const response = await api.get<Booking[]>(url);
+    return response.data;
+  },
 };

@@ -1,4 +1,3 @@
-// src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -26,7 +25,7 @@ import NotFound from './pages/NotFound';
 // Create a client
 const queryClient = new QueryClient();
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode; userType?: string }> = ({ 
+const ProtectedRoute: React.FC<{ children: React.ReactNode; userType?: string }> = ({
   children, 
   userType 
 }) => {
