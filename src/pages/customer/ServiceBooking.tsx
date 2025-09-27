@@ -7,6 +7,8 @@ import { Booking } from '../../types/booking';
 import PageTitle from '../../components/common/PageTitle';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+type CustomOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
 const ServiceBooking: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ const ServiceBooking: React.FC = () => {
 
   // Booking mutation
   const bookingMutation = useMutation({
-    mutationFn: (bookingData: Omit<Booking, 'id' | 'status' | 'createdAt'>) => 
+    mutationFn: (bookingData: CustomOmit<Booking, 'id' | 'status' | 'createdAt'>) => 
       api.booking.createBooking(bookingData),
     onSuccess: () => {
       navigate('/my-bookings', { state: { message: 'Booking successful!' } });
@@ -59,13 +61,15 @@ const ServiceBooking: React.FC = () => {
     
     const bookingDateTime = new Date(`${selectedDate}T${selectedTime}`);
     
-    const booking: Omit<Booking, 'id' | 'status' | 'createdAt'> = {
-      serviceId: service.id,
-      providerId: service.providerId,
-      scheduledAt: bookingDateTime.toISOString(),
-      notes: notes,
-      serviceName: service.name,
-      servicePrice: service.price
+    const booking: CustomOmit<Booking, 'id' | 'status' | 'createdAt'> = {
+        serviceId: service.id,
+        providerId: service.providerId,
+        bookingStartDateTime: bookingDateTime.toISOString(),
+        // TODO: hard-coded
+        bookingDuration: 5,
+        customerId: "customerId",
+        notes: notes,
+        totalPrice: service.price
     };
     
     bookingMutation.mutate(booking);

@@ -12,13 +12,19 @@ const PartnerDashboard: React.FC = () => {
     data: stats, 
     isLoading: statsLoading, 
     error: statsError 
-  } = useQuery(['partnerStats', timeframe], () => api.partner.getPartnerStats(timeframe));
+  } = useQuery({
+    queryKey: ['partnerStats', timeframe],
+    queryFn: () => api.partner.getPartnerStats(timeframe)
+  });
 
   const { 
     data: profile, 
     isLoading: profileLoading, 
     error: profileError 
-  } = useQuery('partnerProfile', api.partner.getPartnerProfile);
+  } = useQuery({
+    queryKey: ['partnerProfile'],
+    queryFn: () => api.partner.getPartnerProfile()
+  });
 
   const isLoading = statsLoading || profileLoading;
   const error = statsError || profileError;

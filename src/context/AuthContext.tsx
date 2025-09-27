@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: () => void;
   logout: () => void;
+  fetchCurrentUser: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -46,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setIsLoading(true);
       const response = await api.user.login(email, password);
-      const { token, user } = response;
+      const { user, token } = response;
       localStorage.setItem('token', token);
       setCurrentUser(user);
       setError(null);
@@ -74,6 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     login,
     loginWithGoogle,
     logout,
+    fetchCurrentUser,
     isAuthenticated: !!currentUser,
   };
 

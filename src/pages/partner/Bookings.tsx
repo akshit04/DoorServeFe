@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../api/api';
-import { Booking, BookingStatus } from '../../types/booking';
+import { Booking, BookingStatus, BookingRequest } from '../../types/booking';
 import PageTitle from '../../components/common/PageTitle';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
@@ -10,29 +10,37 @@ const PartnerBookings: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   // Fetch partner bookings
-  const { data, isLoading, error } = useQuery(
-    ['partnerBookings', filter],
-    async () => {
+  const { data: recentBookings, isLoading, error } = useQuery({
+    queryKey: ['partnerBookings', filter],
+    queryFn: async () => {
       // We would typically have a dedicated endpoint in the partner API for this
       // For now, we'll simulate it through the booking API
       const response = await api.booking.getPartnerBookings(filter !== 'ALL' ? filter : undefined);
       return response;
     }
-  );
+  });
 
   useEffect(() => {
-    if (data) {
-      setBookings(data);
+    if (recentBookings) {
+      setBookings(recentBookings);
     }
-  }, [data]);
+  }, [recentBookings]);
 
-  const handleStatusChange = async (bookingId: number, newStatus: BookingStatus) => {
+  const handleStatusChange = async (bookingId: string, newStatus: BookingStatus) => {
     try {
-      await api.booking.updateBookingStatus(bookingId, newStatus);
+      // Find the booking to update
+      const bookingToUpdate = bookings.find(b => b.id === bookingId);
+      if (!bookingToUpdate) return;
+
+      const updatedBooking = { ...bookingToUpdate, status: newStatus };
+      await api.booking.rescheduleBooking(parseInt(bookingId), updatedBooking);
+      
       // Update the booking in our local state
       setBookings(prevBookings => 
         prevBookings.map(booking => 
-          booking.id === bookingId ? { ...booking, status: newStatus } : booking
+          booking.id === bookingId 
+            ? { ...booking, status: newStatus }
+            : booking
         )
       );
     } catch (error) {
@@ -146,16 +154,19 @@ const PartnerBookings: React.FC = () => {
                     #{booking.id}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {booking.customer.firstName} {booking.customer.lastName}
+                    {booking.customer?.firstName || 'N/A'} {booking.customer?.lastName || ''}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {booking.service.name}
+                    {booking.service?.name || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(booking.date)}
+                    {booking.date ? formatDate(booking.date) : formatDate(booking.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
+                    {booking.startTime && booking.endTime 
+                      ? `${formatTime(booking.startTime)} - ${formatTime(booking.endTime)}`
+                      : booking.bookingStartDateTime || 'N/A'
+                    }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(booking.status)}`}>

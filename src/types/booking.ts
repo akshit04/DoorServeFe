@@ -5,16 +5,26 @@ export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED
 
 export interface Booking {
     id: string;
-    customer: User;
-    service: Service;
-    providerId: number;
-    date: string; // ISO date string
-    startTime: string; // HH:MM format
-    endTime: string; // HH:MM format
+    customerId: string;
+    serviceId: string;
+    providerId: string;
+    bookingStartDateTime: string; // HH:MM format
+    bookingDuration: number;
     status: BookingStatus;
     notes?: string;
     totalPrice: number;
     createdAt: string; // ISO date string
+    // Additional properties for UI display
+    customer?: {
+        firstName: string;
+        lastName: string;
+    };
+    service?: {
+        name: string;
+    };
+    date?: string;
+    startTime?: string;
+    endTime?: string;
 }
 
 export interface BookingRequest {

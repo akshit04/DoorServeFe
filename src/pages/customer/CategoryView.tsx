@@ -12,7 +12,7 @@ const CategoryView: React.FC = () => {
   // Fetch category details
   const { data: category, isLoading: categoryLoading } = useQuery({
     queryKey: ['category', categoryId],
-    queryFn: () => api.categoryApi.getCategoryById(Number(categoryId)),
+    queryFn: () => api.category.getCategoryById(Number(categoryId)),
     enabled: !!categoryId
   });
   

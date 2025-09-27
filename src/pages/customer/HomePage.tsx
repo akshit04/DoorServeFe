@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
   // Fetch all categories
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => api.categoryApi.getAllCategories()
+    queryFn: () => api.category.getAllCategories()
   });
 
   const handleSearch = async (e: React.FormEvent) => {

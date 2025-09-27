@@ -1,14 +1,15 @@
 import axios from 'axios';
 
-const api = axios.create({
-    // specify the port of the backend server
-    baseURL: process.env.BACKEND_APP_API_URL || 'http://localhost:8080/api',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
+const SERVER = 'http://localhost:8080/api';
 
-api.interceptors.request.use((config) => {
+const axiosInstance = axios.create({
+  baseURL: SERVER,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+} as any);
+
+axiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -16,4 +17,4 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-export default api;
+export default axiosInstance;

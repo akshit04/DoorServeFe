@@ -48,9 +48,9 @@ const CustomerDashboard: React.FC = () => {
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium">{booking.service.name}</h3>
+                        <h3 className="font-medium">{booking.serviceId}</h3>
                         <p className="text-sm text-gray-600">
-                          {new Date(booking.date).toLocaleDateString()} • {booking.startTime}
+                          {new Date(booking.bookingStartDateTime).toLocaleDateString()} • {booking.bookingStartDateTime}
                         </p>
                       </div>
                       <span className={`px-2 py-1 text-xs rounded-full ${

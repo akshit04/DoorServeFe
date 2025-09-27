@@ -188,10 +188,10 @@ const MyBookings: React.FC = () => {
               {filteredBookings.map((booking) => (
                 <tr key={booking.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{booking.serviceName}</div>
+                    <div className="text-sm font-medium text-gray-900">{booking.serviceId}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{formatDate(booking.scheduledAt)}</div>
+                    <div className="text-sm text-gray-500">{formatDate(booking.bookingStartDateTime)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(booking.status)}`}>
@@ -199,12 +199,12 @@ const MyBookings: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${booking.servicePrice}
+                    ${booking.totalPrice}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {(booking.status === 'PENDING' || booking.status === 'CONFIRMED') && (
                       <button
-                        onClick={() => handleCancelBooking(booking.id)}
+                        onClick={() => handleCancelBooking(Number(booking.id))}
                         className="text-red-600 hover:text-red-900 mr-4"
                         disabled={cancelMutation.isPending}
                       >

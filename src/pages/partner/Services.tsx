@@ -5,40 +5,41 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import api from '../../api/api';
 import { Service } from '../../types/service';
 
+type CustomOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
 const PartnerServices: React.FC = () => {
   const queryClient = useQueryClient();
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   
   // Get current user ID for filtering services
-  const { data: userData } = useQuery('currentUser', () => api.user.getCurrentUser());
+  const { data: userData } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => api.user.getCurrentUser()
+  });
   
   // Get services for the current partner
   const { 
     data: services, 
     isLoading, 
     error 
-  } = useQuery(
-    ['partnerServices', userData?.id], 
-    () => userData?.id ? api.service.getServicesByProviderId(userData.id) : Promise.resolve([]),
-    {
-      enabled: !!userData?.id
-    }
-  );
+  } = useQuery({
+    queryKey: ['partnerServices', userData?.id],
+    queryFn: () => userData?.id ? api.service.getServicesByProviderId(parseInt(userData.id)) : Promise.resolve([]),
+    enabled: !!userData?.id
+  });
 
   // Mutation to delete a service
-  const deleteMutation = useMutation(
-    (serviceId: number) => api.service.deleteService(serviceId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['partnerServices']);
-      }
+  const deleteMutation = useMutation({
+    mutationFn: (serviceId: number) => api.service.deleteService(serviceId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['partnerServices'] });
     }
-  );
+  });
 
-  const handleDeleteService = (serviceId: number) => {
+  const handleDeleteService = (serviceId: string) => {
     if (window.confirm('Are you sure you want to delete this service?')) {
-      deleteMutation.mutate(serviceId);
+      deleteMutation.mutate(parseInt(serviceId));
     }
   };
 
@@ -183,7 +184,7 @@ const PartnerServices: React.FC = () => {
           onClose={() => setShowAddModal(false)}
           onSuccess={() => {
             setShowAddModal(false);
-            queryClient.invalidateQueries(['partnerServices']);
+            queryClient.invalidateQueries({ queryKey: ['partnerServices'] });
           }}
         />
       )}
@@ -211,26 +212,28 @@ const ServiceFormModal: React.FC<ServiceFormModalProps> = ({ service, onClose, o
     featured: false
   };
 
-  const [formData, setFormData] = useState<Omit<Service, 'id'>>(initialFormState as Omit<Service, 'id'>);
-  const { data: userData } = useQuery('currentUser', () => api.user.getCurrentUser());
+  const [formData, setFormData] = useState<CustomOmit<Service, 'id'>>(initialFormState as CustomOmit<Service, 'id'>);
+  const { data: userData } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => api.user.getCurrentUser()
+  });
   
   // Get categories for dropdown
-  const { data: categories } = useQuery('categories', () => api.categoryApi.getAllCategories());
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.category.getAllCategories()
+  });
 
   // Create or update service mutations
-  const createMutation = useMutation(
-    (newService: Omit<Service, 'id'>) => api.service.createService(newService),
-    {
-      onSuccess
-    }
-  );
+  const createMutation = useMutation({
+    mutationFn: (newService: CustomOmit<Service, 'id'>) => api.service.createService(newService),
+    onSuccess
+  });
 
-  const updateMutation = useMutation(
-    (updatedService: Service) => api.service.updateService(updatedService.id, updatedService),
-    {
-      onSuccess
-    }
-  );
+  const updateMutation = useMutation({
+    mutationFn: (updatedService: Service) => api.service.updateService(parseInt(updatedService.id), updatedService),
+    onSuccess
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -256,7 +259,7 @@ const ServiceFormModal: React.FC<ServiceFormModalProps> = ({ service, onClose, o
     // Set the provider ID to current user ID
     const serviceData = {
       ...formData,
-      providerId: userData?.id || 0
+      providerId: userData?.id || '0'
     };
     
     if (isEditing && service) {
@@ -266,7 +269,7 @@ const ServiceFormModal: React.FC<ServiceFormModalProps> = ({ service, onClose, o
     }
   };
 
-  const isSubmitting = createMutation.isLoading || updateMutation.isLoading;
+  const isSubmitting = createMutation.isPending || updateMutation.isPending;
   const error = createMutation.error || updateMutation.error;
 
   return (

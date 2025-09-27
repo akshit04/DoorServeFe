@@ -1,4 +1,4 @@
-import api from './axios';
+import axiosInstance from './axios';
 import { PartnerProfile, PartnerStats } from '../types/partner';
 
 export const partnerApi = {
@@ -6,7 +6,7 @@ export const partnerApi = {
    * Get partner profile
    */
   getPartnerProfile: async () => {
-    const response = await api.get<PartnerProfile>('/partners/profile');
+    const response = await axiosInstance.get<PartnerProfile>('/partners/profile');
     return response.data;
   },
 
@@ -14,7 +14,7 @@ export const partnerApi = {
    * Update partner profile
    */
   updatePartnerProfile: async (profileData: Partial<PartnerProfile>) => {
-    const response = await api.put<PartnerProfile>('/partners/profile', profileData);
+    const response = await axiosInstance.put<PartnerProfile>('/partners/profile', profileData);
     return response.data;
   },
 
@@ -22,7 +22,7 @@ export const partnerApi = {
    * Get partner statistics
    */
   getPartnerStats: async (period: 'day' | 'week' | 'month' = 'month') => {
-    const response = await api.get<PartnerStats>(`/partners/stats?period=${period}`);
+    const response = await axiosInstance.get<PartnerStats>(`/partners/stats?period=${period}`);
     return response.data;
   },
 
@@ -35,7 +35,7 @@ export const partnerApi = {
     endTime: string,
     available: boolean
   }[]) => {
-    const response = await api.put('/partners/availability', { availability });
+    const response = await axiosInstance.put('/partners/availability', { availability });
     return response.data;
   },
 
@@ -43,7 +43,7 @@ export const partnerApi = {
    * Get all partners (admin only)
    */
   getAllPartners: async () => {
-    const response = await api.get('/partners');
+    const response = await axiosInstance.get('/partners');
     return response.data;
   }
 };

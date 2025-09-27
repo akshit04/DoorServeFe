@@ -5,7 +5,7 @@ export interface Service {
     price: number;
     duration: number; // in minutes
     category: string;
-    providerId: number;
+    providerId: string;
     available: boolean;
     featured?: boolean;
     rating?: number;
