@@ -37,7 +37,7 @@ const AuthCallback: React.FC = () => {
         if (userType === 'PARTNER') {
           navigate('/partner');
         } else {
-          navigate('/');
+          navigate('/dashboard');
         }
       } catch (err) {
         console.error('Error in auth callback:', err);

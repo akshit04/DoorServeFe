@@ -6,7 +6,7 @@ interface AuthContextType {
   currentUser: User | null;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   loginWithGoogle: () => void;
   logout: () => void;
   fetchCurrentUser: () => Promise<void>;
@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('token', token);
       setCurrentUser(user);
       setError(null);
+      return user; // Return user so Login component can handle navigation
     } catch (err: any) {
       setError(err.response?.message || 'Failed to login');
       throw err;
@@ -60,7 +61,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithGoogle = () => {
-    window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/google`;
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+    window.location.href = `${apiUrl}/oauth2/authorization/google`;
   };
 
   const logout = () => {

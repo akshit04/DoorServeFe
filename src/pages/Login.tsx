@@ -11,8 +11,13 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const user = await login(email, password);
+      // Navigate based on user type
+      if (user.userType === 'PARTNER') {
+        navigate('/partner');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       // Error is handled in AuthContext
     }

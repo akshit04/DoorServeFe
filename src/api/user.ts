@@ -8,8 +8,32 @@ export const userApi = {
    * Register a new user
    */
   register: async (userData: CustomOmit<User, 'id'>) => {
-    const response = await axiosInstance.post<{ user: User, token: string }>('/auth/register', userData);
-    return response.data;
+    const response = await axiosInstance.post<{
+      token: string;
+      userType: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+    }>('/auth/register', userData);
+    
+    // Convert AuthResponse to User format expected by frontend
+    const user: User = {
+      id: '', // Will be populated when we fetch current user
+      email: response.data.email,
+      password: '', // Not returned from backend for security
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      phone: userData.phone || '',
+      address: userData.address || {
+        street: '',
+        city: '',
+        state: '',
+        zipCode: ''
+      },
+      userType: response.data.userType as 'CUSTOMER' | 'PARTNER'
+    };
+    
+    return { user, token: response.data.token };
   },
 
   /**
@@ -28,8 +52,32 @@ export const userApi = {
         email: email,
         password: password
     };
-    const response = await axiosInstance.post<User>('/auth/login', loginData);
-    return {user: response.data, token: "token"};
+    const response = await axiosInstance.post<{
+      token: string;
+      userType: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+    }>('/auth/login', loginData);
+    
+    // Convert AuthResponse to User format expected by frontend
+    const user: User = {
+      id: '', // Will be populated when we fetch current user
+      email: response.data.email,
+      password: '', // Not returned from backend for security
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      phone: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        zipCode: ''
+      },
+      userType: response.data.userType as 'CUSTOMER' | 'PARTNER'
+    };
+    
+    return { user, token: response.data.token };
   },
 
   /**

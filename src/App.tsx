@@ -77,6 +77,13 @@ const AppRoutes = () => {
           </MainLayout>
         </ProtectedRoute>
       } />
+      <Route path="/dashboard" element={
+        <ProtectedRoute userType="CUSTOMER">
+          <MainLayout>
+            <CustomerDashboard />
+          </MainLayout>
+        </ProtectedRoute>
+      } />
       <Route path="/my-bookings" element={
         <ProtectedRoute userType="CUSTOMER">
           <MainLayout>
