@@ -71,11 +71,11 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   };
 
   return (
-    <Card 
-      className="group cursor-pointer transform transition-all duration-200 hover:scale-105 hover:shadow-lg border-2 border-transparent hover:border-primary-200"
-      padding="lg"
-      onClick={handleClick}
-    >
+    <div onClick={handleClick} className="cursor-pointer">
+      <Card
+        className="group transform transition-all duration-200 hover:scale-105 hover:shadow-lg border-2 border-transparent hover:border-primary-200"
+        padding="lg"
+      >
       <div className="text-center">
         {category.iconUrl ? (
           <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
@@ -110,6 +110,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
         </div>
       </div>
     </Card>
+    </div>
   );
 };
 
