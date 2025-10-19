@@ -1,19 +1,25 @@
 import { Service } from './service';
 
-// For now, keep the existing structure but add provider info
+// Cart item structure matching backend DTO
 export interface CartItem {
     id: number;
-    service: Service; // This will be the service template
-    provider: {
+    service?: {
+        id: number;
+        name: string;
+        description: string;
+        category: string;
+        imageUrl?: string;
+    };
+    provider?: {
         id: number;
         name: string;
         rating: number;
         experienceYears: number;
     };
-    title: string; // Provider's custom title
+    title?: string; // Provider's custom title
     quantity: number;
     price: number;
-    duration: number;
+    duration?: number;
     createdAt: string;
     updatedAt?: string;
 }
