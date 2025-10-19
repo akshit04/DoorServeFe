@@ -63,11 +63,10 @@ const ServiceBooking: React.FC = () => {
     
     const booking: CustomOmit<Booking, 'id' | 'status' | 'createdAt'> = {
         serviceId: service.id,
-        providerId: service.providerId,
+        partnerId: 1, // TODO: This should be selected from available partners
         bookingStartDateTime: bookingDateTime.toISOString(),
-        // TODO: hard-coded
-        bookingDuration: 5,
-        customerId: "customerId",
+        bookingDuration: service.duration || 60,
+        customerId: 1, // TODO: Get from current user
         notes: notes,
         totalPrice: service.price
     };

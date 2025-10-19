@@ -91,7 +91,7 @@ const CustomerDashboard: React.FC = () => {
               {recommendedServices?.map((service) => (
                 <Link 
                   key={service.id} 
-                  to={`/book/${service.id}`} 
+                  to={`/service/${service.id}`} 
                   className="block group"
                 >
                   <div className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">

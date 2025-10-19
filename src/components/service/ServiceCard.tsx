@@ -10,7 +10,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/book/${service.id}`);
+    navigate(`/service/${service.id}`);
   };
 
   return (

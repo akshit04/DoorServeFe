@@ -26,14 +26,14 @@ const PartnerBookings: React.FC = () => {
     }
   }, [recentBookings]);
 
-  const handleStatusChange = async (bookingId: string, newStatus: BookingStatus) => {
+  const handleStatusChange = async (bookingId: number, newStatus: BookingStatus) => {
     try {
       // Find the booking to update
       const bookingToUpdate = bookings.find(b => b.id === bookingId);
       if (!bookingToUpdate) return;
 
       const updatedBooking = { ...bookingToUpdate, status: newStatus };
-      await api.booking.rescheduleBooking(parseInt(bookingId), updatedBooking);
+      await api.booking.rescheduleBooking(bookingId, updatedBooking);
       
       // Update the booking in our local state
       setBookings(prevBookings => 

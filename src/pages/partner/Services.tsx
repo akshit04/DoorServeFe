@@ -37,9 +37,9 @@ const PartnerServices: React.FC = () => {
     }
   });
 
-  const handleDeleteService = (serviceId: string) => {
+  const handleDeleteService = (serviceId: number) => {
     if (window.confirm('Are you sure you want to delete this service?')) {
-      deleteMutation.mutate(parseInt(serviceId));
+      deleteMutation.mutate(serviceId);
     }
   };
 
@@ -231,7 +231,7 @@ const ServiceFormModal: React.FC<ServiceFormModalProps> = ({ service, onClose, o
   });
 
   const updateMutation = useMutation({
-    mutationFn: (updatedService: Service) => api.service.updateService(parseInt(updatedService.id), updatedService),
+    mutationFn: (updatedService: Service) => api.service.updateService(updatedService.id, updatedService),
     onSuccess
   });
 

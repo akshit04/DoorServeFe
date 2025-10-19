@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../ui/Button';
+import CartIcon from '../cart/CartIcon';
 
 const Header: React.FC = () => {
   const { currentUser, logout, isAuthenticated } = useAuth();
@@ -77,6 +78,9 @@ const Header: React.FC = () => {
 
           {/* Desktop Auth Section */}
           <div className="hidden md:flex items-center space-x-4">
+            {isAuthenticated && currentUser?.userType === 'CUSTOMER' && (
+              <CartIcon />
+            )}
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <span className="text-sm text-gray-600">

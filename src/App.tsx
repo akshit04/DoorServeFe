@@ -14,8 +14,10 @@ import Register from './pages/Register';
 import CustomerDashboard from './pages/customer/Dashboard';
 import SearchResults from './pages/customer/SearchResults';
 import CategoryView from './pages/customer/CategoryView';
+import ServiceDetails from './pages/customer/ServiceDetails';
 import ServiceBooking from './pages/customer/ServiceBooking';
 import MyBookings from './pages/customer/MyBookings';
+import Cart from './pages/customer/Cart';
 import PartnerDashboard from './pages/partner/Dashboard';
 import PartnerServices from './pages/partner/Services';
 import PartnerBookings from './pages/partner/Bookings';
@@ -70,6 +72,11 @@ const AppRoutes = () => {
           <CategoryView />
         </MainLayout>
       } />
+      <Route path="/service/:serviceId" element={
+        <MainLayout>
+          <ServiceDetails />
+        </MainLayout>
+      } />
       <Route path="/book/:serviceId" element={
         <ProtectedRoute userType="CUSTOMER">
           <MainLayout>
@@ -88,6 +95,13 @@ const AppRoutes = () => {
         <ProtectedRoute userType="CUSTOMER">
           <MainLayout>
             <MyBookings />
+          </MainLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/cart" element={
+        <ProtectedRoute userType="CUSTOMER">
+          <MainLayout>
+            <Cart />
           </MainLayout>
         </ProtectedRoute>
       } />

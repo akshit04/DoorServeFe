@@ -4,11 +4,11 @@ import { Service } from './service';
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
 export interface Booking {
-    id: string;
-    customerId: string;
-    serviceId: string;
-    providerId: string;
-    bookingStartDateTime: string; // HH:MM format
+    id: number;
+    customerId: number;
+    serviceId: number;
+    partnerId: number;
+    bookingStartDateTime: string; // ISO date string
     bookingDuration: number;
     status: BookingStatus;
     notes?: string;
