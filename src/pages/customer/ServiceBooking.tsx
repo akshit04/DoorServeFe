@@ -12,6 +12,11 @@ type CustomOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 const ServiceBooking: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
   const navigate = useNavigate();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [notes, setNotes] = useState<string>('');

@@ -186,7 +186,7 @@ const HomePage: React.FC = () => {
                     ) : (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {categories?.slice(0, 8).map((category) => (
-                                <CategoryCard key={category.id} category={category} />
+                                <CategoryCard key={category.name} category={category} />
                             ))}
                         </div>
                     )}
@@ -195,9 +195,9 @@ const HomePage: React.FC = () => {
                         <Button
                             variant="outline"
                             size="lg"
-                            onClick={() => navigate('/search')}
+                            onClick={() => navigate('/services')}
                         >
-                            View All Categories
+                            View All Services
                             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                             </svg>

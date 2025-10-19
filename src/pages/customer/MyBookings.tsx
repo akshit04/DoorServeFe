@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import { BookingStatus } from '../../types/booking';
@@ -9,6 +9,11 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 const MyBookings: React.FC = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<BookingStatus | 'ALL'>('ALL');
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [showAlert, setShowAlert] = useState<boolean>(!!location.state?.message);
   const [alertMessage, setAlertMessage] = useState<string>(location.state?.message || '');
 

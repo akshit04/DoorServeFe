@@ -14,6 +14,11 @@ const SearchResults: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // Get search term from URL parameters
   useEffect(() => {
     setSearchTerm(searchParams.get('term') || '');
@@ -102,15 +107,15 @@ const SearchResults: React.FC = () => {
               </div>
               
               {categories?.map(category => (
-                <div key={category.id} className="flex items-center">
+                <div key={category.name} className="flex items-center">
                   <input
-                    id={`category-${category.id}`}
+                    id={`category-${category.name}`}
                     type="radio"
                     checked={selectedCategory === category.name}
                     onChange={() => setSelectedCategory(category.name)}
                     className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
                   />
-                  <label htmlFor={`category-${category.id}`} className="ml-2 text-gray-700">
+                  <label htmlFor={`category-${category.name}`} className="ml-2 text-gray-700">
                     {category.name}
                   </label>
                 </div>

@@ -6,26 +6,15 @@ export const categoryApi = {
    * Get all service categories
    */
   getAllCategories: async () => {
-    // var dummyCategories = [{'id': 'id', 'name': 'name', 'description': 'description', 'iconUrl': 'iconUrl'}];
-    // console.log("Dummy categories: ", dummyCategories);
-    // return dummyCategories;
-    try {
-        console.log("Dwight: calling categories");
-        debugger;
-        const response = await axiosInstance.get<Category[]>('/services-catalog');
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        console.error('getAllCategories failed');
-        throw error;
-    }
+    const response = await axiosInstance.get<Category[]>('/categories');
+    return response.data;
   },
 
   /**
-   * Get category by ID
+   * Get category by name
    */
-  getCategoryById: async (id: number) => {
-    const response = await axiosInstance.get<Category>(`/services-catalog/${id}`);
+  getCategoryByName: async (name: string) => {
+    const response = await axiosInstance.get<Category>(`/categories/${encodeURIComponent(name)}`);
     return response.data;
   }
 };

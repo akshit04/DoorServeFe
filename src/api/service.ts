@@ -1,5 +1,6 @@
 import axiosInstance from './axios';
 import { Service } from '../types/service';
+import { ServiceDetails } from '../types/serviceDetails';
 
 type CustomOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -72,6 +73,14 @@ export const serviceApi = {
    */
   getFeaturedServices: async (limit: number = 5) => {
     const response = await axiosInstance.get<Service[]>(`/services/featured?limit=${limit}`);
+    return response.data;
+  },
+
+  /**
+   * Get detailed service information with available partners
+   */
+  getServiceDetails: async (id: number) => {
+    const response = await axiosInstance.get<ServiceDetails>(`/services/${id}/details`);
     return response.data;
   }
 };

@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CustomerDashboard from './pages/customer/Dashboard';
 import SearchResults from './pages/customer/SearchResults';
+import AllServices from './pages/customer/AllServices';
 import CategoryView from './pages/customer/CategoryView';
 import ServiceDetails from './pages/customer/ServiceDetails';
 import ServiceBooking from './pages/customer/ServiceBooking';
@@ -65,6 +66,11 @@ const AppRoutes = () => {
       <Route path="/search" element={
         <MainLayout>
           <SearchResults />
+        </MainLayout>
+      } />
+      <Route path="/services" element={
+        <MainLayout>
+          <AllServices />
         </MainLayout>
       } />
       <Route path="/category/:categoryId" element={

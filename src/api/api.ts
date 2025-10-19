@@ -4,6 +4,7 @@ import { userApi } from './user';
 import { partnerApi } from './partner';
 import { categoryApi } from './category';
 import { cartApi } from './cart';
+import { reviewApi } from './review';
 
 export const api = {
   service: serviceApi,
@@ -12,6 +13,7 @@ export const api = {
   partner: partnerApi,
   category: categoryApi,
   cart: cartApi,
+  review: reviewApi,
 };
 
 export default api;

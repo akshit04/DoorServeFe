@@ -11,7 +11,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/category/${category.id}`);
+    navigate(`/category/${encodeURIComponent(category.name)}`);
   };
 
   // Icon mapping for common categories

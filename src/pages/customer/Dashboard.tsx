@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -8,6 +8,11 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const CustomerDashboard: React.FC = () => {
   const { currentUser } = useAuth();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   
   // Fetch recent bookings
   const { data: recentBookings, isLoading: bookingsLoading } = useQuery({
@@ -124,7 +129,7 @@ const CustomerDashboard: React.FC = () => {
             </div>
             
             <div className="mt-4 text-center">
-              <Link to="/" className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+              <Link to="/services" className="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
                 Browse all services →
               </Link>
             </div>

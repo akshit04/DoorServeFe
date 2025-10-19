@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../api/api';
@@ -8,19 +8,25 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const CategoryView: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
+  const categoryName = decodeURIComponent(categoryId || '');
+  
+  // Scroll to top when component mounts or category changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [categoryName]);
   
   // Fetch category details
   const { data: category, isLoading: categoryLoading } = useQuery({
-    queryKey: ['category', categoryId],
-    queryFn: () => api.category.getCategoryById(Number(categoryId)),
-    enabled: !!categoryId
+    queryKey: ['category', categoryName],
+    queryFn: () => api.category.getCategoryByName(categoryName),
+    enabled: !!categoryName
   });
   
   // Fetch services for this category
   const { data: services, isLoading: servicesLoading } = useQuery({
-    queryKey: ['servicesByCategory', categoryId],
-    queryFn: () => api.service.getServicesByCategory(category?.name || ''),
-    enabled: !!category?.name
+    queryKey: ['servicesByCategory', categoryName],
+    queryFn: () => api.service.getServicesByCategory(categoryName),
+    enabled: !!categoryName
   });
   
   const isLoading = categoryLoading || servicesLoading;
