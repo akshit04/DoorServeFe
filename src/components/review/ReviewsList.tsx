@@ -8,9 +8,10 @@ interface ReviewsListProps {
   partnerId: number;
   partnerName: string;
   maxReviews?: number;
+  showAll?: boolean;
 }
 
-const ReviewsList: React.FC<ReviewsListProps> = ({ partnerId, partnerName, maxReviews = 5 }) => {
+const ReviewsList: React.FC<ReviewsListProps> = ({ partnerId, partnerName, maxReviews = 5, showAll = false }) => {
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ['partnerReviews', partnerId],
     queryFn: () => api.review.getPartnerReviews(partnerId),
@@ -29,7 +30,7 @@ const ReviewsList: React.FC<ReviewsListProps> = ({ partnerId, partnerName, maxRe
     );
   }
 
-  const displayedReviews = reviews.slice(0, maxReviews);
+  const displayedReviews = showAll ? reviews : reviews.slice(0, maxReviews);
 
   if (reviews.length === 0) {
     return (

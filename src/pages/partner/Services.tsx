@@ -130,10 +130,10 @@ const PartnerServices: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                    ${service.price.toFixed(2)}
+                    No fixed price
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {service.duration} mins
+                    {service.baseDuration || 'Varies'} mins
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -358,7 +358,7 @@ const ServiceFormModal: React.FC<ServiceFormModalProps> = ({ service, onClose, o
                     required
                     min="0"
                     step="0.01"
-                    value={formData.price}
+                    value={formData.baseDuration || ''}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />
@@ -375,7 +375,7 @@ const ServiceFormModal: React.FC<ServiceFormModalProps> = ({ service, onClose, o
                     required
                     min="15"
                     step="15"
-                    value={formData.duration}
+                    value={formData.baseDuration || ''}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />

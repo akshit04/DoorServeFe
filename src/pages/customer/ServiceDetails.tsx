@@ -12,7 +12,7 @@ const ServiceDetails: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
-  const [quantity, setQuantity] = useState(1);
+
 
   // Scroll to top when component mounts or serviceId changes
   useEffect(() => {
@@ -28,9 +28,9 @@ const ServiceDetails: React.FC = () => {
 
   const service = serviceDetails?.service;
 
-  // Add to cart mutation
+  // Add to cart mutation (now for specific provider offerings)
   const addToCartMutation = useMutation({
-    mutationFn: (data: { serviceId: number; quantity: number }) => 
+    mutationFn: (data: { partnerServiceId: number; quantity: number }) => 
       api.cart.addToCart(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
@@ -44,18 +44,16 @@ const ServiceDetails: React.FC = () => {
     }
   });
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (partnerServiceId: number) => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    if (service) {
-      addToCartMutation.mutate({
-        serviceId: service.id,
-        quantity
-      });
-    }
+    addToCartMutation.mutate({
+      partnerServiceId: partnerServiceId,
+      quantity: 1
+    });
   };
 
   const handleBookNow = () => {
@@ -140,25 +138,11 @@ const ServiceDetails: React.FC = () => {
           {/* Title and Rating */}
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{service.name}</h1>
-            {service.rating && (
-              <div className="flex items-center space-x-2">
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
-                    <svg 
-                      key={i}
-                      className={`w-5 h-5 ${i < Math.round(service.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`} 
-                      fill="currentColor" 
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-gray-600 font-medium">{service.rating.toFixed(1)}</span>
-                <span className="text-gray-400">•</span>
-                <span className="text-gray-600">Professional Service</span>
-              </div>
-            )}
+            <div className="flex items-center space-x-2">
+              <span className="text-gray-600">Multiple providers available</span>
+              <span className="text-gray-400">•</span>
+              <span className="text-gray-600">Compare prices and reviews below</span>
+            </div>
           </div>
 
           {/* Description */}
@@ -170,71 +154,26 @@ const ServiceDetails: React.FC = () => {
           {/* Service Details */}
           <div className="grid grid-cols-2 gap-4 py-4 border-t border-b border-gray-200">
             <div>
-              <span className="text-sm text-gray-500">Duration</span>
-              <p className="font-semibold text-gray-900">{service.duration} minutes</p>
+              <span className="text-sm text-gray-500">Suggested Duration</span>
+              <p className="font-semibold text-gray-900">{service.baseDuration || 'Varies by provider'} {service.baseDuration ? 'minutes' : ''}</p>
             </div>
             <div>
               <span className="text-sm text-gray-500">Availability</span>
               <p className={`font-semibold ${service.available ? 'text-green-600' : 'text-red-600'}`}>
-                {service.available ? 'Available' : 'Not Available'}
+                {service.available ? 'Available from providers below' : 'Not Available'}
               </p>
             </div>
           </div>
 
-          {/* Price and Actions */}
+          {/* Service Information */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-3xl font-bold text-indigo-600">${service.price}</span>
-                <span className="text-gray-500 ml-2">per service</span>
-              </div>
-            </div>
-
-            {/* Quantity Selector */}
-            <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-gray-700">Quantity:</span>
-              <div className="flex items-center border border-gray-300 rounded-md">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3 py-1 text-gray-600 hover:text-gray-800"
-                  disabled={quantity <= 1}
-                >
-                  -
-                </button>
-                <span className="px-4 py-1 border-l border-r border-gray-300">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="px-3 py-1 text-gray-600 hover:text-gray-800"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex space-x-4">
-              <Button
-                onClick={handleAddToCart}
-                variant="outline"
-                className="flex-1"
-                disabled={!service.available || addToCartMutation.isPending}
-              >
-                {addToCartMutation.isPending ? 'Adding...' : 'Add to Cart'}
-              </Button>
-              <Button
-                onClick={handleBookNow}
-                className="flex-1"
-                disabled={!service.available}
-              >
-                Book Now
-              </Button>
-            </div>
-
-            {!service.available && (
-              <p className="text-sm text-red-600 text-center">
-                This service is currently not available for booking.
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-900 mb-2">How it works:</h3>
+              <p className="text-blue-800 text-sm">
+                This service is offered by multiple providers below. Each provider has their own pricing, 
+                experience level, and customer reviews. Compare providers and choose the one that best fits your needs.
               </p>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -250,9 +189,10 @@ const ServiceDetails: React.FC = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 gap-6">
+          <div className="space-y-4">
             {serviceDetails.availablePartners.map((partner) => (
-              <div key={partner.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div key={partner.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                   onClick={() => navigate(`/service/${serviceId}/provider/${partner.partnerId}`)}>
                 {/* Partner Header */}
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex items-start justify-between mb-4">
@@ -286,17 +226,31 @@ const ServiceDetails: React.FC = () => {
                   
                   <p className="text-gray-600 text-sm mb-4">{partner.description}</p>
                   
-                  <div className="flex items-center justify-end">
-                    <button
-                      onClick={() => {
-                        // TODO: Implement partner-specific booking
-                        handleBookNow();
-                      }}
-                      className="px-6 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors"
-                      disabled={!partner.available}
-                    >
-                      {partner.available ? 'Book This Provider' : 'Unavailable'}
-                    </button>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-indigo-600 font-medium">Click to view full details →</span>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddToCart(partner.id);
+                        }}
+                        className="px-4 py-2 text-indigo-600 border border-indigo-600 text-sm rounded-md hover:bg-indigo-50 transition-colors"
+                        disabled={!partner.available || addToCartMutation.isPending}
+                      >
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // TODO: Implement partner-specific booking
+                          handleBookNow();
+                        }}
+                        className="px-6 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors"
+                        disabled={!partner.available}
+                      >
+                        {partner.available ? 'Book Now' : 'Unavailable'}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 

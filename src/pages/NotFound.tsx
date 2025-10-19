@@ -18,10 +18,10 @@ const NotFound: React.FC = () => {
             Go Back Home
           </Link>
           <Link 
-            to="/search" 
+            to="/services" 
             className="px-6 py-3 bg-gray-100 text-gray-800 rounded-md shadow hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           >
-            Search Services
+            Browse Services
           </Link>
         </div>
       </div>

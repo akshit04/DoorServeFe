@@ -16,6 +16,7 @@ import SearchResults from './pages/customer/SearchResults';
 import AllServices from './pages/customer/AllServices';
 import CategoryView from './pages/customer/CategoryView';
 import ServiceDetails from './pages/customer/ServiceDetails';
+import ProviderDetails from './pages/customer/ProviderDetails';
 import ServiceBooking from './pages/customer/ServiceBooking';
 import MyBookings from './pages/customer/MyBookings';
 import Cart from './pages/customer/Cart';
@@ -81,6 +82,11 @@ const AppRoutes = () => {
       <Route path="/service/:serviceId" element={
         <MainLayout>
           <ServiceDetails />
+        </MainLayout>
+      } />
+      <Route path="/service/:serviceId/provider/:partnerId" element={
+        <MainLayout>
+          <ProviderDetails />
         </MainLayout>
       } />
       <Route path="/book/:serviceId" element={

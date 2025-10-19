@@ -119,8 +119,8 @@ const CustomerDashboard: React.FC = () => {
                       </span>
                       <h3 className="mt-2 font-medium group-hover:text-indigo-600">{service.name}</h3>
                       <div className="flex justify-between items-center mt-2">
-                        <span className="font-bold text-indigo-600">${service.price}</span>
-                        <span className="text-sm text-gray-500">{service.duration} mins</span>
+                        <span className="text-indigo-600">Multiple providers</span>
+                        <span className="text-sm text-gray-500">{service.baseDuration ? `~${service.baseDuration} mins` : 'Duration varies'}</span>
                       </div>
                     </div>
                   </div>

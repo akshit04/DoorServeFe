@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (searchTerm.trim()) {
-            navigate(`/search?term=${encodeURIComponent(searchTerm)}`);
+            navigate(`/services?search=${encodeURIComponent(searchTerm)}`);
         }
     };
 
@@ -312,13 +312,12 @@ const HomePage: React.FC = () => {
                         Join thousands of satisfied customers who trust DoorServe for their home service needs.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button
-                            size="lg"
-                            className="bg-white text-primary-600 hover:bg-gray-50 px-8 py-4"
-                            onClick={() => navigate('/search')}
+                        <button
+                            className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium bg-white text-primary-600 rounded-lg shadow-md hover:bg-gray-50 hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600"
+                            onClick={() => navigate('/services')}
                         >
                             Browse Services
-                        </Button>
+                        </button>
                         <Button
                             variant="outline"
                             size="lg"
