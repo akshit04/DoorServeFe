@@ -3,6 +3,7 @@ import { Service } from './service';
 // Cart item structure matching backend DTO
 export interface CartItem {
     id: number;
+    partnerServiceId: number; // ID of the partner service
     service?: {
         id: number;
         name: string;

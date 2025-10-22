@@ -6,27 +6,32 @@ import ServiceCard from '../../components/service/ServiceCard';
 import PageTitle from '../../components/common/PageTitle';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { slugToName } from '../../utils/slugs';
+
 const CategoryView: React.FC = () => {
-  const { categoryId } = useParams<{ categoryId: string }>();
-  const categoryName = decodeURIComponent(categoryId || '');
+  const { categorySlug } = useParams<{ categorySlug: string }>();
+  const categoryName = slugToName(categorySlug || '');
   
   // Scroll to top when component mounts or category changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [categoryName]);
+  }, [categorySlug]);
   
   // Fetch category details
   const { data: category, isLoading: categoryLoading } = useQuery({
-    queryKey: ['category', categoryName],
+    queryKey: ['category', categorySlug],
     queryFn: () => api.category.getCategoryByName(categoryName),
-    enabled: !!categoryName
+    enabled: !!categorySlug
   });
   
-  // Fetch services for this category
+  // Fetch services for this category using slug
   const { data: services, isLoading: servicesLoading } = useQuery({
-    queryKey: ['servicesByCategory', categoryName],
-    queryFn: () => api.service.getServicesByCategory(categoryName),
-    enabled: !!categoryName
+    queryKey: ['servicesByCategorySlug', categorySlug],
+    queryFn: () => {
+      console.log('🔍 DEBUG: Fetching services for category slug:', categorySlug);
+      return api.service.getServicesByCategorySlug(categorySlug || '');
+    },
+    enabled: !!categorySlug
   });
   
   const isLoading = categoryLoading || servicesLoading;

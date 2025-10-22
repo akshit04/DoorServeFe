@@ -6,24 +6,24 @@ import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ReviewsList from '../../components/review/ReviewsList';
+import { createSlug } from '../../utils/slugs';
 
 const ServiceDetails: React.FC = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
+  const { serviceSlug } = useParams<{ serviceSlug: string }>();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
-
-  // Scroll to top when component mounts or serviceId changes
+  // Scroll to top when component mounts or serviceSlug changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [serviceId]);
+  }, [serviceSlug]);
 
-  // Fetch service details with partner information
+  // Fetch service details with partner information using slug
   const { data: serviceDetails, isLoading, error } = useQuery({
-    queryKey: ['serviceDetails', serviceId],
-    queryFn: () => api.service.getServiceDetails(Number(serviceId)),
-    enabled: !!serviceId
+    queryKey: ['serviceDetailsBySlug', serviceSlug],
+    queryFn: () => api.service.getServiceDetailsBySlug(serviceSlug || ''),
+    enabled: !!serviceSlug
   });
 
   const service = serviceDetails?.service;
@@ -61,7 +61,7 @@ const ServiceDetails: React.FC = () => {
       navigate('/login');
       return;
     }
-    navigate(`/book/${serviceId}`);
+    navigate(`/book/${serviceSlug}`);
   };
 
   if (isLoading) {
@@ -96,7 +96,7 @@ const ServiceDetails: React.FC = () => {
           </li>
           <li>/</li>
           <li>
-            <button onClick={() => navigate(`/category/${service.category}`)} className="hover:text-indigo-600">
+            <button onClick={() => navigate(`/category/${createSlug(service.category)}`)} className="hover:text-indigo-600">
               {service.category}
             </button>
           </li>
@@ -192,7 +192,7 @@ const ServiceDetails: React.FC = () => {
           <div className="space-y-4">
             {serviceDetails.availablePartners.map((partner) => (
               <div key={partner.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                   onClick={() => navigate(`/service/${serviceId}/provider/${partner.partnerId}`)}>
+                   onClick={() => navigate(`/service/${serviceSlug}/provider/${partner.partnerId}`)}>
                 {/* Partner Header */}
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex items-start justify-between mb-4">
@@ -242,8 +242,25 @@ const ServiceDetails: React.FC = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // TODO: Implement partner-specific booking
-                          handleBookNow();
+                          if (!isAuthenticated) {
+                            navigate('/login');
+                            return;
+                          }
+                          
+                          const checkoutData = {
+                            items: [{
+                              partnerServiceId: partner.id,
+                              quantity: 1,
+                              price: partner.price,
+                              title: partner.partnerName + ' - ' + service.name,
+                              name: service.name
+                            }],
+                            total: partner.price,
+                            paymentType: 'direct' as const,
+                            serviceId: partner.id
+                          };
+                          
+                          navigate('/checkout', { state: checkoutData });
                         }}
                         className="px-6 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors"
                         disabled={!partner.available}

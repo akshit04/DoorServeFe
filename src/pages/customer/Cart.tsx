@@ -76,8 +76,19 @@ const Cart: React.FC = () => {
     };
 
     const handleCheckout = () => {
-        // For now, just navigate to bookings - you can implement checkout later
-        navigate('/my-bookings');
+        const checkoutData = {
+            items: cartItems.map(item => ({
+                partnerServiceId: (item as any).partnerServiceId || 0, // Type assertion for now
+                quantity: item.quantity,
+                price: item.price,
+                title: item.title,
+                name: item.service?.name
+            })),
+            total: calculateTotal(),
+            paymentType: 'cart' as const
+        };
+        
+        navigate('/checkout', { state: checkoutData });
     };
 
     if (isLoading) {

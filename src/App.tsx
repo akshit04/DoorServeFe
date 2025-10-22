@@ -20,6 +20,8 @@ import ProviderDetails from './pages/customer/ProviderDetails';
 import ServiceBooking from './pages/customer/ServiceBooking';
 import MyBookings from './pages/customer/MyBookings';
 import Cart from './pages/customer/Cart';
+import Checkout from './pages/customer/Checkout';
+import PaymentSuccess from './pages/customer/PaymentSuccess';
 import PartnerDashboard from './pages/partner/Dashboard';
 import PartnerServices from './pages/partner/Services';
 import PartnerBookings from './pages/partner/Bookings';
@@ -74,22 +76,22 @@ const AppRoutes = () => {
           <AllServices />
         </MainLayout>
       } />
-      <Route path="/category/:categoryId" element={
+      <Route path="/category/:categorySlug" element={
         <MainLayout>
           <CategoryView />
         </MainLayout>
       } />
-      <Route path="/service/:serviceId" element={
+      <Route path="/service/:serviceSlug" element={
         <MainLayout>
           <ServiceDetails />
         </MainLayout>
       } />
-      <Route path="/service/:serviceId/provider/:partnerId" element={
+      <Route path="/service/:serviceSlug/provider/:partnerId" element={
         <MainLayout>
           <ProviderDetails />
         </MainLayout>
       } />
-      <Route path="/book/:serviceId" element={
+      <Route path="/book/:serviceSlug" element={
         <ProtectedRoute userType="CUSTOMER">
           <MainLayout>
             <ServiceBooking />
@@ -114,6 +116,20 @@ const AppRoutes = () => {
         <ProtectedRoute userType="CUSTOMER">
           <MainLayout>
             <Cart />
+          </MainLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/checkout" element={
+        <ProtectedRoute userType="CUSTOMER">
+          <MainLayout>
+            <Checkout />
+          </MainLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/payment-success" element={
+        <ProtectedRoute userType="CUSTOMER">
+          <MainLayout>
+            <PaymentSuccess />
           </MainLayout>
         </ProtectedRoute>
       } />

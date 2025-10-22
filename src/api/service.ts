@@ -82,5 +82,38 @@ export const serviceApi = {
   getServiceDetails: async (id: number) => {
     const response = await axiosInstance.get<ServiceDetails>(`/services/${id}/details`);
     return response.data;
+  },
+
+  // Slug-based methods for better URLs
+  /**
+   * Get service by slug
+   */
+  getServiceBySlug: async (slug: string) => {
+    const response = await axiosInstance.get<Service>(`/services/by-slug/${slug}`);
+    return response.data;
+  },
+
+  /**
+   * Get detailed service information by slug
+   */
+  getServiceDetailsBySlug: async (slug: string) => {
+    const response = await axiosInstance.get<ServiceDetails>(`/services/by-slug/${slug}/details`);
+    return response.data;
+  },
+
+  /**
+   * Get services by category slug
+   */
+  getServicesByCategorySlug: async (categorySlug: string) => {
+    const response = await axiosInstance.get<Service[]>(`/services/category-slug/${categorySlug}`);
+    return response.data;
+  },
+
+  /**
+   * Get all categories with slugs
+   */
+  getAllCategories: async () => {
+    const response = await axiosInstance.get<{name: string, slug: string}[]>('/categories');
+    return response.data;
   }
 };

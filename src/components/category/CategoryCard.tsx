@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Category } from '../../types/category';
 import Card from '../ui/Card';
+import { createSlug } from '../../utils/slugs';
 
 interface CategoryCardProps {
   category: Category;
@@ -11,7 +12,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/category/${encodeURIComponent(category.name)}`);
+    navigate(`/category/${createSlug(category.name)}`);
   };
 
   // Icon mapping for common categories

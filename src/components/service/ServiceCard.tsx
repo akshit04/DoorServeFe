@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Service } from '../../types/service';
+import { createSlug } from '../../utils/slugs';
 
 interface ServiceCardProps {
   service: Service;
@@ -10,7 +11,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/service/${service.id}`);
+    navigate(`/service/${createSlug(service.name)}`);
   };
 
   return (

@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       title: 'Services',
       links: [
         { label: 'Browse All Services', path: '/services' },
-        { label: 'Home Cleaning', path: '/category/cleaning' },
+        { label: 'Cleaning', path: '/category/cleaning' },
         { label: 'Plumbing', path: '/category/plumbing' },
         { label: 'Electrical', path: '/category/electrical' },
         { label: 'Handyman', path: '/category/handyman' },
